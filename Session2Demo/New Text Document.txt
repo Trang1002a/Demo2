@@ -1,0 +1,50 @@
+create database QLBH
+go
+use QLBH
+GO
+Create table category(
+	id int PRIMARY key identity,
+	name varchar(100) not null unique,
+	status tinyint default(1) ,
+	parentId int NOT NULl DEFAULT(1)
+)
+go
+create table product(
+	id int primary key identity,
+	name varchar(150) not null,
+	image varchar(150),
+	status tinyint default(1),
+	price float NOT NULL,
+	quantity int not null,
+	sale_price float default(1),
+	description text,
+	created_date date default(CURRENT_TIMESTAMP),
+	category_id int foreign key references category(id)
+)
+go
+create table account(
+	id int primary key identity,
+	name nvarchar(150) not null,
+	email nvarchar(150) not null unique,
+	password varchar(50) not null,
+	Address nvarchar(255),
+	Role bit not null default(0)
+)
+go
+create table Order1(
+	Id int primary key identity,
+	accountId int not null,
+	status tinyint default(1) CHECK(status>=0 AND status <=3),
+	Total_price float not null,
+	orderDate Datetime default(CURRENT_TIMESTAMP),
+	foreign key(accountId) references account(id)
+)
+go
+Create table OrderDetail(
+	OrderId int not null,
+	ProductId int not null,
+	Quantity int not null, check(Quantity >0),
+	Price float not null,
+	foreign key(OrderId) references Order1(Id),
+	foreign key(ProductId) references product(id),
+)
